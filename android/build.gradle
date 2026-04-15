@@ -51,6 +51,6 @@ android {
 
     dependencies {
         implementation("androidx.annotation:annotation:1.9.1")
-        implementation("com.antonkarpenko:ffmpeg-kit-full-gpl:2.1.0")
+        implementation("io.github.jamaismagic.ffmpeg:ffmpeg-kit-lts-full-gpl-16kb:6.1.4")
     }
 }
