@@ -47,6 +47,19 @@ android {
         minSdk = 24
         versionCode 1
         versionName "1.0.0"
+
+        externalNativeBuild {
+            cmake {
+                // Only build the stub for the ABI we actually ship.
+                abiFilters "arm64-v8a"
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+        }
     }
 
     dependencies {

@@ -58,6 +58,21 @@ import io.flutter.plugin.common.PluginRegistry;
 
 public class FFmpegKitFlutterPlugin implements FlutterPlugin, ActivityAware, MethodCallHandler, EventChannel.StreamHandler, PluginRegistry.ActivityResultListener {
 
+    static {
+        // LC-FIX: Load the PLATFORM_hid_write no-op stub BEFORE any FFmpegKit
+        // native library is loaded. libavdevice.so (bundled in the JamaisMagic
+        // ffmpeg-kit-lts-full-gpl-16kb AAR) references PLATFORM_hid_write, an
+        // Android Bluetooth HID platform function removed in API 35. Loading
+        // libhidapi_compat first puts the stub symbol into the app's linker
+        // namespace so libavdevice.so resolves it cleanly at load time.
+        try {
+            System.loadLibrary("hidapi_compat");
+        } catch (UnsatisfiedLinkError e) {
+            android.util.Log.w("ffmpeg-kit-flutter",
+                    "hidapi_compat stub not loaded: " + e.getMessage());
+        }
+    }
+
     public static final String LIBRARY_NAME = "ffmpeg-kit-flutter";
     public static final String PLATFORM_NAME = "android";
 
